@@ -8,6 +8,7 @@ using std::endl;
 using std::floor;
 using std::string;
 using std::stof;
+using std::max;
 
 int main() {
 
@@ -20,7 +21,16 @@ int main() {
         while ( getline (file,module) )
         {
             int mass = int(floor(stof(module)/ 3.0) - 2);
-            sum += mass;
+
+            int extra = mass;
+            int fuel = 0;
+            while(extra > 0)
+            {
+                extra = max(0, int(floor(float(extra)/ 3.0) - 2));
+                fuel += extra;
+            }
+
+            sum += mass + fuel;
         }
         file.close();
     }
@@ -29,7 +39,8 @@ int main() {
         cout << "Couldn't open file" << endl;
     }
 
-    cout << "Sum: " << sum << endl;
+    cout << "Sum fuel: " << sum << endl;
+
 
     return 0;
 }
