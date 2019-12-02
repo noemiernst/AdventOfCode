@@ -11,20 +11,11 @@ using std::atoi;
 using std::vector;
 using std::to_string;
 
-int main() {
 
-    ifstream input_file("../input.txt");
-    vector<int> opcodes;
-
-    for (int i; input_file >> i;) {
-        opcodes.push_back(i);
-        if (input_file.peek() == ',')
-            input_file.ignore();
-    }
-    input_file.close();
-
-    for (size_t i = 0; i < opcodes.size(); i++)
-        cout << opcodes[i] << endl;
+int program(vector<int> opcodes, int noun, int verb)
+{
+    opcodes.at(1) = noun;
+    opcodes.at(2) = verb;
 
     int acc = 0;
 
@@ -52,18 +43,47 @@ int main() {
 
     }
 
-    ofstream output_file("../output.txt");
-    output_file.clear();
+    return opcodes[0];
+}
 
-    string solution;
+
+int main() {
+
+    ifstream input_file("../input.txt");
+    vector<int> opcodes;
+
+    for (int i; input_file >> i;) {
+        opcodes.push_back(i);
+        if (input_file.peek() == ',')
+            input_file.ignore();
+    }
+    input_file.close();
+
     for (size_t i = 0; i < opcodes.size(); i++)
-        solution += to_string(opcodes[i]) + ',';
-    solution.pop_back();
-    cout << solution;
-    output_file << solution;
+        cout << opcodes[i] << endl;
 
-    output_file.close();
+    int output = 0;
+    int noun = 0;
+    int verb = 0;
+    for(;output != 19690720 && noun < 100; ++noun)
+    {
+        verb = 0;
+        for(;output != 19690720 && verb < 100; ++verb)
+        {
+            vector<int> inp;
+            for (size_t i = 0; i < opcodes.size(); i++)
+                inp.push_back(opcodes[i]);
+            output = program(inp, noun, verb);
+        }
+    }
+    --verb;
+    --noun;
+
+
+    cout << "Output: " << output << endl;
+    cout << "Noun: " << noun << endl;
+    cout << "Verb: " << verb << endl;
+    cout << "100 * noun + verb = " << 100*noun+verb << endl;
 
     return 0;
 }
-
