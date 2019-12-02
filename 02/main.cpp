@@ -5,9 +5,11 @@
 using std::cout;
 using std::endl;
 using std::ifstream;
+using std::ofstream;
 using std::string;
 using std::atoi;
 using std::vector;
+using std::to_string;
 
 int main() {
 
@@ -19,27 +21,48 @@ int main() {
         if (input_file.peek() == ',')
             input_file.ignore();
     }
-
+    input_file.close();
 
     for (size_t i = 0; i < opcodes.size(); i++)
         cout << opcodes[i] << endl;
 
     int acc = 0;
 
-    switch(opcodes.at(acc))
+    while(acc < opcodes.size())
     {
-        case 1:
+        switch(opcodes.at(acc))
+        {
+            case 1:
+                opcodes.at(opcodes.at(acc+3)) = opcodes.at(opcodes.at(acc+1)) + opcodes.at(opcodes.at(acc+2));
+                acc += 4;
+                break;
+            case 2:
+                opcodes.at(opcodes.at(acc+3)) = opcodes.at(opcodes.at(acc+1)) * opcodes.at(opcodes.at(acc+2));
+                acc += 4;
+                break;
+            case 99:
+                cout << "Program finished with code 99" << endl;
+                acc = opcodes.size();
+                break;
+            default:
+                cout << "Something went wrong" << endl;
+                acc = opcodes.size();
+                break;
+        }
 
-            break;
-        case 2:
-
-            break;
-        case 99:
-
-            break;
-        default:
-            cout << "Something went wrong" << endl;
     }
+
+    ofstream output_file("../output.txt");
+    output_file.clear();
+
+    string solution;
+    for (size_t i = 0; i < opcodes.size(); i++)
+        solution += to_string(opcodes[i]) + ',';
+    solution.pop_back();
+    cout << solution;
+    output_file << solution;
+
+    output_file.close();
 
     return 0;
 }
