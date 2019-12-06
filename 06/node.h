@@ -13,6 +13,7 @@ using std::string;
 class node {
 public:
     string name;
+    node * parent;
     vector<node *> children;
 
     node(string name);
@@ -22,6 +23,7 @@ public:
     int total_orbits();
     bool is_child(node* child);
     void display();
+    int distance_to_child(node* child);
 
 };
 

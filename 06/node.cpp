@@ -7,7 +7,7 @@
 using std::cout;
 using std::endl;
 
-node::node(string name): name(name)
+node::node(string name): name(name), parent(nullptr)
 { }
 
 int node::direct_orbits()
@@ -48,5 +48,14 @@ void node::display()
     for(auto c: children)
     {
         c->display();
+    }
+}
+
+int node::distance_to_child(node * child)
+{
+    node* it = this;
+    while(it != child)
+    {
+
     }
 }

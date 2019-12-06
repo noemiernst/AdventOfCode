@@ -2,6 +2,7 @@
 #include "node.h"
 #include <fstream>
 #include <map>
+#include <queue>
 using namespace std;
 
 map<string, node*> read_map()
@@ -34,6 +35,7 @@ map<string, node*> read_map()
             {
                 object_ptr = nodes.at(object);
             }
+            object_ptr->parent = mass_ptr;
             mass_ptr->children.push_back(object_ptr);
         }
     } else
@@ -58,18 +60,40 @@ node * find_root(map<string, node*> nodes, node* root = nullptr, bool found = fa
     return find_root(nodes, root, found);
 }
 
+vector<node*> path_to_root(node* start, node* root)
+{
+    node * it = start->parent;
+    vector<node*> path;
+    while(it != nullptr)
+    {
+        path.push_back(it);
+        it = it->parent;
+    }
+    return path;
+}
+
+int find_distance(vector<node*> path1, vector<node*> path2)
+{
+    node* last = nullptr;
+    while(path1.back() == path2.back())
+    {
+        last = path1.back();
+        path1.pop_back();
+        path2.pop_back();
+    }
+    return path1.size() + path2.size();
+}
+
 int main() {
     map<string, node*> nodes = read_map();
 
     node* root = find_root(nodes);
 
-    cout << "root: " << root->name << endl;
-    for(auto node: nodes)
-        cout << node.first << endl;
+    cout << "Total orbits: " << root->total_orbits() << endl;
 
-    cout << root->direct_orbits() << endl;
-    cout << root->indirect_orbits() << endl;
-    cout << root->total_orbits();
+    int transfers = find_distance(path_to_root(nodes.find("YOU")->second, root), path_to_root(nodes.find("SAN")->second, root));
+
+    cout << "Transfers: " << transfers << endl;
 
     return 0;
 }
