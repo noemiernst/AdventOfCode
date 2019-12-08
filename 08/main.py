@@ -31,6 +31,32 @@ def find_layer_fewest_0(image):
             layer_fewest0 = layer
     return layer_fewest0
 
+def decode_image(image):
+    result =[]
+    result_string = ""
+    for i in range(height):
+        row = []
+        for j in range(width):
+            for layer in image:
+                if(layer[i][j] != 2):
+                    row.append(layer[i][j])
+                    result_string += str(layer[i][j])
+                    break
+        result.append(row)
+    print(result_string)
+    print(len(result_string))
+    return result
+
+def print_result(result):
+    for row in result:
+        line = ""
+        for num in row:
+            if(num == 0):
+                line += 'O'
+            else:
+                line += '.'
+        print(line)
+
 def main():
     file = open('input.txt')
     position = 0
@@ -38,11 +64,12 @@ def main():
     image = []
 
     print('Length : ', len(input))
-    print('# Layers: ', int(len(input)/ ( 25 * 6)))
-    for i in range(int(len(input)/ ( 25 * 6))):
-        file.seek(i * 25 * 6)
+    print('# Layers: ', int(len(input)/ ( width * height)))
+    for i in range(int(len(input)/ ( width * height))):
+        file.seek(i * ( width * height))
         image.append(read_layer(file, position))
 
+    print(image)
     layer = find_layer_fewest_0(image)
 
     print('fewest: ', layer)
@@ -52,5 +79,7 @@ def main():
     print('Num 2s: ', find_num_of_x(layer, 2))
     print('Output: ', find_num_of_x(layer, 1) * find_num_of_x(layer, 2))
 
+
+    print_result(decode_image(image))
 
 main()
